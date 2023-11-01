@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GuestActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineGuest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <Button
+        android:id="@+id/guest_login_btn"
+        android:layout_width="265dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:hint="Login as a guest"
+        android:textColorHint="@color/white"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guidelineGuest"
+        tools:ignore="HardcodedText" />
+
+    <ProgressBar
+        android:id="@+id/guest_progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="invisible"
+
+        app:layout_constraintBottom_toBottomOf="@+id/guest_login_btn"
+        app:layout_constraintEnd_toEndOf="@+id/guest_login_btn"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="@+id/guest_login_btn"
+        app:layout_constraintTop_toTopOf="@+id/guest_login_btn"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <CheckBox
+        android:id="@+id/guest_age_checkbox"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="346dp"
+        android:layout_marginBottom="337dp"
+
+
+        android:checked="false"
+        android:clickable="true"
+        android:text="Over 18?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:buttonIconTintMode="src_in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/guest_inputbox_email"
+        android:layout_width="265dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/guest_age_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText,TextContrastCheck"
+        android:importantForAutofill="no" />
+    <EditText
+        android:id="@+id/guest_inputbox_phone"
+        android:layout_width="265dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="28dp"
+        android:ems="10"
+        android:hint="Phone number"
+        android:inputType="phone"
+        app:layout_constraintBottom_toTopOf="@+id/guest_inputbox_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText,TextContrastCheck"
+        android:importantForAutofill="no" />
+
+    <TextView
+        android:id="@+id/text_or"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="Or"
+        android:textAlignment="center"
+        android:textColor="#673AB7"
+        app:layout_constraintBottom_toTopOf="@+id/guest_inputbox_email"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guest_inputbox_phone"
+        tools:ignore="HardcodedText,TextContrastCheck,TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/text_guest_Back"
+        android:layout_width="265dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="8dp"
+        android:text="Go back to login"
+        android:textAlignment="textEnd"
+        android:textColor="#03A9F4"
+        app:layout_constraintEnd_toEndOf="parent"
+
+
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guest_login_btn"
+        tools:ignore="HardcodedText,TextSizeCheck,TextContrastCheck" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
