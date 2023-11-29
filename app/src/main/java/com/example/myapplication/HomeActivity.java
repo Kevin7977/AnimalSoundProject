@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -21,14 +23,19 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
+
     private static final String CAT_SOUND = "MEOW";
     private static final String DOG_SOUND = "WOOF";
     private static final String COW_SOUND = "MOO";
+    private static final String DUCK_SOUND = "QUACK";
+    private String UserUid ="";
+
+    private ImageView ImageView;
 
     private ActivityResultLauncher<Intent> speechRecognitionLauncher;
     private TextView resultText;
     private ImageButton voiceButton;
+    private Button EditProfileBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,20 @@ public class HomeActivity extends AppCompatActivity {
 
         resultText = findViewById(R.id.textTv);
         voiceButton = findViewById(R.id.voiceBtn);
+
+        ImageView = findViewById(R.id.Img_home);
+        EditProfileBtn = findViewById(R.id.EditProfileBtn);
+
+        UserUid = getIntent().getStringExtra("UserUid");
+        if (UserUid.isEmpty()){
+            EditProfileBtn.setEnabled(false);
+        }
+
+
+
+
+
+
 
         speechRecognitionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -52,6 +73,16 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startSpeechRecognition();
+            }
+        });
+
+        EditProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent directto_EditProfile = new Intent(getApplicationContext(), EditProfileActivity.class);
+                directto_EditProfile.putExtra("UserUid",UserUid);
+                startActivity(directto_EditProfile);
+                finish();
             }
         });
     }
@@ -92,8 +123,31 @@ public class HomeActivity extends AppCompatActivity {
         }*/
         ArrayList<String> resultSpeech = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         if( !resultSpeech.get(0).isEmpty()){
-            if(CAT_SOUND.length() - compute_Levenshtein_distanceDP(CAT_SOUND,resultSpeech.get(0))<=1){
+            int cat_distance = compute_Levenshtein_distanceDP(CAT_SOUND,resultSpeech.get(0));
+            int dog_distance = compute_Levenshtein_distanceDP(DOG_SOUND,resultSpeech.get(0));
+            int cow_distance = compute_Levenshtein_distanceDP(COW_SOUND,resultSpeech.get(0));
+            int quack_distance = compute_Levenshtein_distanceDP(DUCK_SOUND,resultSpeech.get(0));
+
+            //displayResult(resultSpeech.get(0)+ cat_distance +dog_distance+cow_distance);
+            if(cat_distance <= 1){
                 displayResult("It's a cat");
+                ImageView.setImageDrawable(getDrawable(R.drawable.cat));
+
+            }else if(dog_distance <= 1){
+                displayResult("It's a dog");
+                ImageView.setImageDrawable(getDrawable(R.drawable.dog));
+
+            }else if (cow_distance <= 1){
+                displayResult("It's a cow");
+                ImageView.setImageDrawable(getDrawable(R.drawable.cow));
+
+            }else if(quack_distance <= 1){
+                displayResult("It's a duck");
+                ImageView.setImageDrawable(getDrawable(R.drawable.duck));
+
+            }else {
+                displayResult("Unknown voice");
+                ImageView.setImageDrawable(getDrawable(R.drawable.question_mark));
             }
 
         }
@@ -112,6 +166,8 @@ public class HomeActivity extends AppCompatActivity {
         // A 2-D matrix to store previously calculated
         // answers of subproblems in order
         // to obtain the final
+        str1 = str1.toLowerCase();
+        str2 = str2.toLowerCase();
 
         int[][] dp = new int[str1.length() + 1][str2.length() + 1];
 

@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -109,51 +110,44 @@ public class RegisterView extends AppCompatActivity {
 
                     User user = new User(name,email, password,dateString);
 
-
-                    databaseReference.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        //check if email is registered before
-                        if (snapshot.hasChild(name)){
-                            showMessage("Name is already registered");
-                        }
-                        else{
-                           // databaseReference.child("Users").child(email).child("Name").setValue(name);
-                            databaseReference.child("Users").child(name).setValue(user, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                    if (databaseError != null) {
-                                        // Error handling
-                                        Log.e("Firebase", "Data could not be saved. " + databaseError.getMessage());
-                                    } else {
-                                        // Data was successfully saved
-                                        Log.i("Firebase", "Data saved successfully.");
-                                    }
-                                }
-                            });
-
-                            //add authentication to firebase auth
-                            firebaseAuth.createUserWithEmailAndPassword(user.getEmail(),user.getPassword()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    //Connect with uid
+                    // After successful input validation, create a user in Firebase Authentication
+                    firebaseAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){
-                                        showMessage("Successfully register");
-                                    }else{
+                                    if (task.isSuccessful()) {
+                                        // User creation successful
+                                        FirebaseUser registeredUser = firebaseAuth.getCurrentUser();
+                                        String userUid = registeredUser.getUid(); // Get the UID
+
+                                        // Create a User object with UID
+                                        User userWithUid = new User(user.getName(), user.getEmail(), user.getPassword(), user.getDate_of_birth(), userUid);
+
+                                        // Save the user data to the Realtime Database under the UID
+                                        databaseReference.child("Users").child(userUid).setValue(userWithUid, new DatabaseReference.CompletionListener() {
+                                            @Override
+                                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                                if (databaseError != null) {
+                                                    // Error handling
+                                                    Log.e("Firebase", "Data could not be saved. " + databaseError.getMessage());
+                                                } else {
+                                                    // Data was successfully saved
+                                                    Log.i("Firebase", "Data saved successfully.");
+                                                    showMessage("Successfully registered");
+
+                                                    // Now, you can navigate to the desired activity
+                                                }
+                                            }
+                                        });
+
+                                    } else {
                                         showMessage(task.getException().toString());
                                     }
                                 }
-
                             });
 
 
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
 
 
                 }

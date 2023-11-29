@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "695133697273",
+    "firebase_url": "https://animal-sound-userinfo-default-rtdb.firebaseio.com",
+    "project_id": "animal-sound-userinfo",
+    "storage_bucket": "animal-sound-userinfo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695133697273:android:2373d98ff5368065c01e28",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGoxwMwfTNUaEa4-FLL4S9DaTqqjwSIZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

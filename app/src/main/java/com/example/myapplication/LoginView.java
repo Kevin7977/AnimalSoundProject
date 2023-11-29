@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,12 +25,14 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.myapplication.databinding.ActivityLoginViewBinding;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class LoginView extends AppCompatActivity {
@@ -36,6 +40,7 @@ public class LoginView extends AppCompatActivity {
     private EditText emailInput,passwordInput;
     private Button loginBtn,guestloginBtn;
     private TextView registerLink;
+    private ImageView loginGifImageView;
     private ProgressBar loginProgressBar;
     private Intent homeintent;
 
@@ -56,6 +61,14 @@ public class LoginView extends AppCompatActivity {
 
         loginBtn = findViewById(R.id.btn_login);
         guestloginBtn = findViewById(R.id.Login_guest_login_btn);
+
+        loginGifImageView = findViewById(R.id.gif_login);
+
+        Glide.with(this)
+                .asGif()
+                .load(R.drawable.cat_dancing) // Replace with the resource ID of your GIF
+                .into(loginGifImageView);
+
 
         homeintent = new Intent(this, MainActivity.class);
 
@@ -129,7 +142,10 @@ public class LoginView extends AppCompatActivity {
                             hideProgressBar();
                             //direct to voice page
                             showMessage("Successful login in ");
+                            FirebaseUser registeredUser = firebaseAuth.getCurrentUser();
+                            String userUid = registeredUser.getUid();
                             Intent directto_Home = new Intent(getApplicationContext(), HomeActivity.class);
+                            directto_Home.putExtra("UserUid",userUid);
                             startActivity(directto_Home);
                             finish();
 
@@ -153,15 +169,22 @@ public class LoginView extends AppCompatActivity {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         User user = userSnapshot.getValue(User.class); // Assuming you have a User class
                         //showMessage("Found user: " + user.toString());
-                        users.add(user);
+                        if(user.getPassword().equals(password)){
+                            User current_user = user;
+                            users.add(user);
+
+
+                        }
+
                     }
                     //default to user 1 that has the same the email and password solution. Could be modify.
-                    if (!users.isEmpty()) {
+                    /*if (!users.isEmpty()) {
                         User login_user = users.get(0);
                         DatabaseReference modifyDataReference = FirebaseDatabase.getInstance().getReference();
                         modifyDataReference.child("CurrentUser").setValue(login_user);
                         //System.out.println(login_user.toString());
-                    }
+                    }*/
+
 
                 } else {
                     System.out.println("User not found.");
@@ -188,5 +211,7 @@ public class LoginView extends AppCompatActivity {
         guestloginBtn.setVisibility(View.VISIBLE);
         loginProgressBar.setVisibility(View.INVISIBLE);
     }
+
+
 
 }

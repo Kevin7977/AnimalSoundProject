@@ -118,6 +118,7 @@ public class GuestActivity extends AppCompatActivity {
         showMessage("Successfully login");
         //direct to homepage
         Intent directto_Home = new Intent(getApplicationContext(), HomeActivity.class);
+        directto_Home.putExtra("UserUid","");
         startActivity(directto_Home);
         finish();
     }
