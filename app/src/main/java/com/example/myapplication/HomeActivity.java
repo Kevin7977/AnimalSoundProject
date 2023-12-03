@@ -28,6 +28,10 @@ public class HomeActivity extends AppCompatActivity {
     private static final String DOG_SOUND = "WOOF";
     private static final String COW_SOUND = "MOO";
     private static final String DUCK_SOUND = "QUACK";
+
+    private static final String PIG_SOUND = "OINK OINK";
+    private static final String LION_SOUND = "ROAR";
+    private static final String BEE_SOUND = "BUZZ";
     private String UserUid ="";
 
     private ImageView ImageView;
@@ -126,7 +130,10 @@ public class HomeActivity extends AppCompatActivity {
             int cat_distance = compute_Levenshtein_distanceDP(CAT_SOUND,resultSpeech.get(0));
             int dog_distance = compute_Levenshtein_distanceDP(DOG_SOUND,resultSpeech.get(0));
             int cow_distance = compute_Levenshtein_distanceDP(COW_SOUND,resultSpeech.get(0));
-            int quack_distance = compute_Levenshtein_distanceDP(DUCK_SOUND,resultSpeech.get(0));
+            int duck_distance = compute_Levenshtein_distanceDP(DUCK_SOUND,resultSpeech.get(0));
+            int pig_distance = compute_Levenshtein_distanceDP(PIG_SOUND, resultSpeech.get(0));
+            int lion_distance = compute_Levenshtein_distanceDP(LION_SOUND,resultSpeech.get(0));
+            int bee_distance = compute_Levenshtein_distanceDP(BEE_SOUND, resultSpeech.get(0));
 
             //displayResult(resultSpeech.get(0)+ cat_distance +dog_distance+cow_distance);
             if(cat_distance <= 1){
@@ -141,11 +148,20 @@ public class HomeActivity extends AppCompatActivity {
                 displayResult("It's a cow");
                 ImageView.setImageDrawable(getDrawable(R.drawable.cow));
 
-            }else if(quack_distance <= 1){
+            }else if(duck_distance <= 1){
                 displayResult("It's a duck");
                 ImageView.setImageDrawable(getDrawable(R.drawable.duck));
 
-            }else {
+            }else if(pig_distance <= 1){
+                displayResult("It's a pig");
+                ImageView.setImageDrawable(getDrawable(R.drawable.pig));
+            }else if(lion_distance <= 1){
+                displayResult("It's a lion");
+                ImageView.setImageDrawable(getDrawable(R.drawable.lion));
+            }else if(bee_distance <= 1){
+                displayResult("It's a bee");
+                ImageView.setImageDrawable(getDrawable(R.drawable.bee));
+            } else {
                 displayResult("Unknown voice");
                 ImageView.setImageDrawable(getDrawable(R.drawable.question_mark));
             }

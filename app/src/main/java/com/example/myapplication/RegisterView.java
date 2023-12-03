@@ -15,23 +15,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.time.DateTimeException;
 import java.time.format.DateTimeFormatter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 
 public class RegisterView extends AppCompatActivity {
@@ -137,6 +131,7 @@ public class RegisterView extends AppCompatActivity {
                                                     showMessage("Successfully registered");
 
                                                     // Now, you can navigate to the desired activity
+                                                    directToLoginpage();
                                                 }
                                             }
                                         });
@@ -153,6 +148,16 @@ public class RegisterView extends AppCompatActivity {
                 }
                 
             }
+
+            private void directToLoginpage(){
+                Intent directto_login = new Intent(getApplicationContext(), LoginView.class);
+                startActivity(directto_login);
+                finish();
+            }
+
+
+
+
         });
 
         loginLink.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +175,7 @@ public class RegisterView extends AppCompatActivity {
     private void showMessage(String s){
         Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
     }
+
 
 
     public boolean isValidDate(String inputDate, String format) {

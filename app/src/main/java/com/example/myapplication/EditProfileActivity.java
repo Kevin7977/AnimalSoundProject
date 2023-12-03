@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,8 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private EditText nameEditText, emailEditText, oldPasswordEditText, newPasswordEditText;
+    private EditText nameEditText, oldPasswordEditText, newPasswordEditText;
     private Button saveButton, cancelButton;
+    private TextView emailText;
     private String UserUid;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference firebaseDataReference;
@@ -37,7 +39,7 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         nameEditText = findViewById(R.id.nameEditText);
-        emailEditText = findViewById(R.id.emailEditText);
+        emailText = findViewById(R.id.emailText);
         oldPasswordEditText = findViewById(R.id.oldPasswordEditText);
         newPasswordEditText = findViewById(R.id.newPasswordEditText);
 
@@ -61,7 +63,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     String email = dataSnapshot.child("email").getValue(String.class);
 
                     // Do something with user data
-                    emailEditText.setHint("Email : "+ email);
+                    emailText.setText(email);
                     nameEditText.setHint("Name : "+ name);
                 } else {
                     // The user does not exist in the database
@@ -97,7 +99,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = nameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
+
                 String oldPassword = oldPasswordEditText.getText().toString();
                 String newPassword = newPasswordEditText.getText().toString();
 
@@ -119,6 +121,12 @@ public class EditProfileActivity extends AppCompatActivity {
                                     if (!hasSpecialSymbols(name)){
                                         Usernode.child("name").setValue(name);
                                         showMessage("Successfully update the name");
+                                        if(newPassword.isEmpty()){
+                                            Intent directto_Home = new Intent(getApplicationContext(), HomeActivity.class);
+                                            directto_Home.putExtra("UserUid",UserUid.toString());
+                                            startActivity(directto_Home);
+                                            finish();
+                                        }
                                     }else{
                                         showMessage("Name cannot contain special symbol");
                                     }
@@ -135,6 +143,10 @@ public class EditProfileActivity extends AppCompatActivity {
                                                         Log.d("TAG", "User password updated.");
                                                         Usernode.child("password").setValue(newPassword);
                                                         showMessage("Successfully update the password");
+                                                        Intent directto_Home = new Intent(getApplicationContext(), HomeActivity.class);
+                                                        directto_Home.putExtra("UserUid",UserUid.toString());
+                                                        startActivity(directto_Home);
+                                                        finish();
 
                                                     } else {
                                                         // Handle errors
@@ -153,44 +165,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                     password = oldPassword;
                                 }
 
-                                if (!email.isEmpty()){
 
-                                    if (isValidEmail(email)){
-                                        AuthCredential credential = EmailAuthProvider.getCredential(CurrentEmail, oldPassword);
-
-                                        AuthUser.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
-                                            if (reauthTask.isSuccessful()) {
-                                                AuthUser.updateEmail(email).addOnCompleteListener(emailUpdateTask -> {
-                                                    if (emailUpdateTask.isSuccessful()) {
-                                                        // Update email in the database
-                                                        Usernode.child("email").setValue(email);
-                                                        showMessage("Successfully update the email");
-                                                    } else {
-                                                        // Handle email update errors
-                                                        Exception exception = emailUpdateTask.getException();
-                                                        Log.w("TAG", "Error updating email address: " + exception.getMessage());
-                                                        showMessage(exception.getMessage());
-                                                    }
-                                                });
-                                            } else {
-                                                // Handle reauthentication errors
-                                                Exception reauthException = reauthTask.getException();
-                                                Log.w("TAG", "Error during reauthentication: " + reauthException.getMessage());
-
-                                            }
-                                        });
-
-
-
-
-
-
-
-                                    }else{
-                                        showMessage("Invalid email");
-                                    }
-
-                                }
 
 
 
@@ -214,7 +189,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 });
 
 
+
+
+
             }
+
         });
     }
 
@@ -237,9 +216,5 @@ public class EditProfileActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean isValidEmail(String email) {
-        // Use a regular expression or Firebase's built-in validation to check email format
-        // Example using regex:
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
+
 }

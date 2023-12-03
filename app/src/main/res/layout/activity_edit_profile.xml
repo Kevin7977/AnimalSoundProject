@@ -9,6 +9,31 @@
     android:padding="70dp">
 
 
+
+
+    <TextView
+        android:id="@+id/emailText2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:text="Email : "
+        android:textSize="23dp"
+        android:textColor="@color/black"
+
+
+        tools:ignore="TouchTargetSizeCheck" />
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:text=""
+        android:textSize="23dp"
+        android:textColor="@color/black"
+
+
+        tools:ignore="TouchTargetSizeCheck" />
+
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="match_parent"
@@ -19,14 +44,6 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <!-- Email Input -->
-    <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Email : "
-        android:inputType="textEmailAddress"
-        tools:ignore="TouchTargetSizeCheck" />
 
     <!-- Bio Input -->
     <EditText
